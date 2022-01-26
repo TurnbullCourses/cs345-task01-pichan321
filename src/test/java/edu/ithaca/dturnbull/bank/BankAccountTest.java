@@ -40,4 +40,14 @@ class BankAccountTest {
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
     }
 
+    @Test
+    void isEmailValid() {
+        assertTrue(BankAccount.isEmailValid("acc@yahoo.com"));
+        assertTrue(BankAccount.isEmailValid("z@ithaca.edu"));
+
+        assertFalse(BankAccount.isEmailValid("@"));
+        assertFalse(BankAccount.isEmailValid("."));
+        assertFalse(BankAccount.isEmailValid("1.e"));
+    }
+
 }
