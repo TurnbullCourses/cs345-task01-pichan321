@@ -36,6 +36,10 @@ class BankAccountTest {
 
         bankAccount.withdraw(100);
         assertEquals(0, bankAccount.getBalance());
+
+        //throw IllegalArgumentException when a negative amount of money is entered
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.withdraw(-300));
+        assertEquals(0, bankAccount.getBalance());
     }
 
     @Test
