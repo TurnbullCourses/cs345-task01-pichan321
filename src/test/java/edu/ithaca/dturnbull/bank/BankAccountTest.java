@@ -7,10 +7,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class BankAccountTest {
 
     @Test
-    void getBalanceTest() {
+    void getBalanceTest() throws InsufficientFundsException {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
-
+        
         assertEquals(200, bankAccount.getBalance(), 0.001);
+        assertNotEquals(100, bankAccount.getBalance());
+
+        bankAccount.withdraw(100);
+        assertEquals(100, bankAccount.getBalance());
+        
+        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(5000));
+        assertEquals(100, bankAccount.getBalance());
+
+        BankAccount bankAccount2 = new BankAccount("a@c", -5);
+
+        assertEquals(-5, bankAccount2.getBalance());
+        assertThrows(InsufficientFundsException.class, () -> bankAccount2.withdraw(5));
+        assertEquals(-5, bankAccount2.getBalance());
     }
 
     @Test
@@ -20,6 +33,9 @@ class BankAccountTest {
 
         assertEquals(100, bankAccount.getBalance(), 0.001);
         assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300));
+
+        bankAccount.withdraw(100);
+        assertEquals(0, bankAccount.getBalance());
     }
 
     @Test
@@ -34,14 +50,13 @@ class BankAccountTest {
         assertFalse(BankAccount.isEmailValid("."));
         assertFalse(BankAccount.isEmailValid("1.e"));
 
-
-        //emails cannot start with any special characters
+        //email prefixes cannot end with any special characters
         assertFalse(BankAccount.isEmailValid("1.@mail.cc"));
         assertFalse(BankAccount.isEmailValid("1-@mail.cc"));
         assertFalse(BankAccount.isEmailValid("1!@mail.cc"));
         assertFalse(BankAccount.isEmailValid("1#@mail.cc"));
 
-        //email prefixes cannot end with any special characters
+        //emails cannot start with any special characters
         assertFalse(BankAccount.isEmailValid(".1@mail.cc"));
         assertFalse(BankAccount.isEmailValid("-1@mail.cc"));
         assertFalse(BankAccount.isEmailValid("!1@mail.cc"));
