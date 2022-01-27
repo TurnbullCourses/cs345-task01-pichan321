@@ -34,19 +34,24 @@ class BankAccountTest {
         assertFalse(BankAccount.isEmailValid("."));
         assertFalse(BankAccount.isEmailValid("1.e"));
 
+
+        //emails cannot start with any special characters
         assertFalse(BankAccount.isEmailValid("1.@mail.cc"));
         assertFalse(BankAccount.isEmailValid("1-@mail.cc"));
         assertFalse(BankAccount.isEmailValid("1!@mail.cc"));
         assertFalse(BankAccount.isEmailValid("1#@mail.cc"));
 
+        //email prefixes cannot end with any special characters
         assertFalse(BankAccount.isEmailValid(".1@mail.cc"));
         assertFalse(BankAccount.isEmailValid("-1@mail.cc"));
         assertFalse(BankAccount.isEmailValid("!1@mail.cc"));
         assertFalse(BankAccount.isEmailValid("#1@mail.cc"));
 
+        //checking domain last portion
         assertFalse(BankAccount.isEmailValid("1@mail.c"));
         assertTrue(BankAccount.isEmailValid("1@mail.cc"));
         assertTrue(BankAccount.isEmailValid("1@mail.ccc"));
+        assertTrue(BankAccount.isEmailValid("1@mail.cccc"));
     }
 
     @Test
