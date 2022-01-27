@@ -19,7 +19,7 @@ class BankAccountTest {
         assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(5000));
         assertEquals(100, bankAccount.getBalance());
 
-        BankAccount bankAccount2 = new BankAccount("a@c", -5);
+        BankAccount bankAccount2 = new BankAccount("a@c.com", -5);
 
         assertEquals(-5, bankAccount2.getBalance());
         assertThrows(InsufficientFundsException.class, () -> bankAccount2.withdraw(5));
