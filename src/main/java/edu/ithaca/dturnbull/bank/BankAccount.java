@@ -89,6 +89,17 @@ public class BankAccount {
      * @return false, if the amount has more than two decimal places
      */
     public static Boolean isAmountValid(double amount) {
-        return false;
+        if (amount < 0) {
+            return false;
+        }
+
+        String amountString = Double.toString(amount);
+        String decimalPlaces = amountString.split("\\.")[1].toString();
+        
+        if (decimalPlaces.length() > 2) {
+            return false;
+        }
+
+        return true;
     }
 }

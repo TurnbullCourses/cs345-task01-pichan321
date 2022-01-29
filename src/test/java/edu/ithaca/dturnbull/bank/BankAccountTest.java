@@ -112,17 +112,20 @@ class BankAccountTest {
     void positiveAmount() {
         //positive amount with no decimals
         assertTrue(BankAccount.isAmountValid(0));
-        assertTrue(BankAccount.isAmountValid(1000000000));
+        assertTrue(BankAccount.isAmountValid(25000));
+        assertTrue(BankAccount.isAmountValid(1000000));
+        assertTrue(BankAccount.isAmountValid(7603213));
+        assertTrue(BankAccount.isAmountValid(9999999));
     }
 
     @Test
     void positiveAmountWithDecimals() {
         //positive amount with decimals
-        
         assertTrue(BankAccount.isAmountValid(0.2)); //1 decimal place
         assertTrue(BankAccount.isAmountValid(0.01)); //2 decimal places
         assertTrue(BankAccount.isAmountValid(60.45)); //2 decimal places
         assertFalse(BankAccount.isAmountValid(75.303)); //3 decimal places
-        assertFalse(BankAccount.isAmountValid(500.9046)); //4 decimal places
+        assertFalse(BankAccount.isAmountValid(5000.9046)); //4 decimal places
+        assertTrue(BankAccount.isAmountValid(9999999.99));
     }
 }
