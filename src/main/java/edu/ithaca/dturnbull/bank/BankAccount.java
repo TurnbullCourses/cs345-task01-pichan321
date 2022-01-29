@@ -83,4 +83,12 @@ public class BankAccount {
             return false;
         }
     }
+
+    /***
+     * @return false, if the amount is negative
+     * @return false, if the amount has more than two decimal places
+     */
+    public static Boolean isAmountValid(double amount) {
+        return false;
+    }
 }

@@ -82,4 +82,47 @@ class BankAccountTest {
         //check for exception thrown correctly
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
     }
+
+    @Test
+    void isAmountValidTest() {
+        negativeAmount();
+        negativeAmountWithDecimals();
+        positiveAmount();
+        positiveAmountWithDecimals();
+    }
+
+    @Test
+    void negativeAmount() {
+        //negative amount
+        assertFalse(BankAccount.isAmountValid(-1));
+        assertFalse(BankAccount.isAmountValid(-1000000000));
+    }
+
+    @Test
+    void negativeAmountWithDecimals() {
+        //positive amount with decimals
+        assertFalse(BankAccount.isAmountValid(-0.01));
+        assertFalse(BankAccount.isAmountValid(-0.2)); //1 decimal place
+        assertFalse(BankAccount.isAmountValid(-60.45)); //2 decimal places
+        assertFalse(BankAccount.isAmountValid(-75.303)); //3 decimal places
+        assertFalse(BankAccount.isAmountValid(-500.9046)); //4 decimal places
+    }
+
+    @Test
+    void positiveAmount() {
+        //positive amount with no decimals
+        assertTrue(BankAccount.isAmountValid(0));
+        assertTrue(BankAccount.isAmountValid(1000000000));
+    }
+
+    @Test
+    void positiveAmountWithDecimals() {
+        //positive amount with decimals
+        
+        assertTrue(BankAccount.isAmountValid(0.2)); //1 decimal place
+        assertTrue(BankAccount.isAmountValid(0.01)); //2 decimal places
+        assertTrue(BankAccount.isAmountValid(60.45)); //2 decimal places
+        assertFalse(BankAccount.isAmountValid(75.303)); //3 decimal places
+        assertFalse(BankAccount.isAmountValid(500.9046)); //4 decimal places
+    }
 }
