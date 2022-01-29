@@ -9,6 +9,11 @@ public class BankAccount {
      * @throws IllegalArgumentException if email is invalid
      */
     public BankAccount(String email, double startingBalance){
+
+        if (!isAmountValid(startingBalance)) {
+            throw new IllegalArgumentException("The amount entered should be postive or have 2 decimal places or less.");
+        }
+
         if (isEmailValid(email)){
             this.email = email;
             this.balance = startingBalance;
@@ -30,6 +35,10 @@ public class BankAccount {
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
      */
     public void withdraw (double amount) throws InsufficientFundsException{
+        if (!isAmountValid(amount)) {
+            throw new IllegalArgumentException("The amount entered should be postive or have 2 decimal places or less.");
+        }
+
         if (amount < 0){
             throw new IllegalArgumentException();
         }
