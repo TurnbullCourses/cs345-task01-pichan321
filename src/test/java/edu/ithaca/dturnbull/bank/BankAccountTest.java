@@ -142,4 +142,49 @@ class BankAccountTest {
         assertFalse(BankAccount.isAmountValid(5000.9046)); //4 decimal places
         assertTrue(BankAccount.isAmountValid(9999999.99));
     }
+
+    @Test
+    void depositTest() {
+        BankAccount bankAccount = new BankAccount("a@c.com", 0);
+
+        //throws for negative amount deposits
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-5));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-1000));
+
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-0.1));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-75.9)); //negative amount with 1 decimal places
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-90.35)); //negative amount with 2 decimal places
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-90.355)); //negative amount with 3 decimal places
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-999999999.3555)); //negative amount with 4 decimal places
+
+        //asserts for positive amount with more than two decimal places
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(0.001));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(0.0055));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(0.00555));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(500.0000000000001));
+    }
+
+    @Test
+    void transferTest() {
+        BankAccount bankAccount = new BankAccount("a@c.com", 50);
+        //throws for negative amount entered
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(".asdasd@edu", -0.01));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(".asdasd@edu", -99999999));
+
+        //asserts for amount with more than two decimal places
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer("pchan@ithaca.edu", 0.001));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer("pchan@ithaca.edu", 0.0055));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer("pchan@ithaca.edu", 0.00555));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer("pchan@ithaca.edu", 500.0000000000001));
+
+        //asserts to for email checks
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(".asdasd@edu", 50));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer("@ithaca.edu", 50));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer("karen-@edu", 50));
+
+        //throws when the amount to be transferred is more than the account's remaining balance
+        BankAccount bankAccount2 = new BankAccount("austin@ithaca.edu", 0);
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 0.01));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 99999999));
+    }
 }

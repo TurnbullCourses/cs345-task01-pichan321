@@ -111,4 +111,20 @@ public class BankAccount {
 
         return true;
     }
+
+    /***
+     * @param amount to be deposited to the account
+     * @post the amount is deposited into the account
+     */
+    public void deposit(double amount) {
+        
+    }
+    
+    /***
+     * @param email of the account you are transferring to
+     * @post the amount is deducted from your account and transferred to the account associated with the email entered
+     */
+    public void transfer(String email, double amount) {
+
+    }
 }
