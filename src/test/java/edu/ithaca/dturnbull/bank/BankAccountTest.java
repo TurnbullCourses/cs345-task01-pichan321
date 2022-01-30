@@ -162,10 +162,28 @@ class BankAccountTest {
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(0.0055));
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(0.00555));
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(500.0000000000001));
+
+        //test for positive amount deposit
+        assertEquals(0, bankAccount.getBalance());
+        
+        bankAccount.deposit(0);
+        assertEquals(0, bankAccount.getBalance());
+
+        bankAccount.deposit(1);
+        assertEquals(1, bankAccount.getBalance());
+
+        bankAccount.deposit(500);
+        assertEquals(501, bankAccount.getBalance());
+
+        bankAccount.deposit(0.01);
+        assertEquals(501.01, bankAccount.getBalance());
+
+        bankAccount.deposit(0.1);
+        assertEquals(501.11, bankAccount.getBalance());
     }
 
     @Test
-    void transferTest() {
+    void transferTest() throws IllegalAccessException {
         BankAccount bankAccount = new BankAccount("a@c.com", 50);
         //throws for negative amount entered
         assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(".asdasd@edu", -0.01));
@@ -185,6 +203,26 @@ class BankAccountTest {
         //throws when the amount to be transferred is more than the account's remaining balance
         BankAccount bankAccount2 = new BankAccount("austin@ithaca.edu", 0);
         assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 0.01));
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 500000));
         assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 99999999));
+
+        //tests for successful transfers
+        BankAccount bankAccount3 = new BankAccount("emily@ithaca.edu", 100000);
+        assertEquals(100000, bankAccount3.getBalance());
+
+        bankAccount3.transfer("christina@ithaca.edu", 15000);
+        assertEquals(85000, bankAccount3.getBalance());
+
+        bankAccount3.transfer("christina@ithaca.edu", 5000);
+        assertEquals(80000, bankAccount3.getBalance());
+
+        bankAccount3.transfer("christina@ithaca.edu", 0.01);
+        assertEquals(79999.99, bankAccount3.getBalance());
+
+        bankAccount3.transfer("christina@ithaca.edu", 0.1);
+        assertEquals(79999.89, bankAccount3.getBalance());
+
+        bankAccount3.transfer("christina@ithaca.edu", 79999.89);
+        assertEquals(0, bankAccount3.getBalance());
     }
 }

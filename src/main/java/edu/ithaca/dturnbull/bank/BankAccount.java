@@ -117,14 +117,31 @@ public class BankAccount {
      * @post the amount is deposited into the account
      */
     public void deposit(double amount) {
-        
+        if (!isAmountValid(amount)) {
+            throw new IllegalArgumentException("The amount entered should be postive or have 2 decimal places or less.");
+        } else {
+            balance += amount;
+        }
     }
-    
+
     /***
-     * @param email of the account you are transferring to
+     * @param recipientEmail of the account you are transferring to
+     * @throws IllegalAccessException if either the email or amount entered is invalid
      * @post the amount is deducted from your account and transferred to the account associated with the email entered
      */
-    public void transfer(String email, double amount) {
+    public void transfer(String recipientEmail, double amount) throws IllegalAccessException {
+        if (!isEmailValid(recipientEmail)) {
+            throw new IllegalArgumentException("The recipient's email you entered is invalid.");
+        }
 
+        if (!isAmountValid(amount)) {
+            throw new IllegalArgumentException("The amount entered should be postive or have 2 decimal places or less.");
+        }
+
+        if (amount > balance) {
+            throw new IllegalArgumentException("The amount to be transferred is larger than your account's remaining balance.");
+        } else {
+            balance -= amount;
+        }
     }
 }
