@@ -51,7 +51,7 @@ class BankAccountTest {
     @Test
     void isEmailValidTest(){
         assertTrue(BankAccount.isEmailValid( "a@b.com"));   // valid email address
-        assertFalse( BankAccount.isEmailValid(""));         // empty string
+        assertFalse( BankAccount.isEmailValid(""));         // empty email string
 
         assertTrue(BankAccount.isEmailValid("acc@yahoo.com"));
         assertTrue(BankAccount.isEmailValid("z@ithaca.edu"));
@@ -77,6 +77,12 @@ class BankAccountTest {
         assertTrue(BankAccount.isEmailValid("1@mail.cc"));
         assertTrue(BankAccount.isEmailValid("1@mail.ccc"));
         assertTrue(BankAccount.isEmailValid("1@mail.cccc"));
+
+        //check for too many @ symbols in the email
+        assertFalse(BankAccount.isEmailValid("a@b@.com"));
+        assertFalse(BankAccount.isEmailValid("a@@ithaca.edu"));
+        assertFalse(BankAccount.isEmailValid("abc@@xyz.com"));
+        assertFalse(BankAccount.isEmailValid("a@b@c@@xy@z.com"));
     }
 
     @Test
