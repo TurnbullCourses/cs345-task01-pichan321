@@ -85,6 +85,10 @@ class BankAccountTest {
         assertFalse(BankAccount.isEmailValid("a@b@c@@xy@z.com"));
 
         //checking domain first portion
+        assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com"));
+        assertFalse(BankAccount.isEmailValid("abc.def@mail..com"));
+        assertFalse(BankAccount.isEmailValid("abc.def@mail"));
+       
     }
 
     @Test
@@ -191,7 +195,13 @@ class BankAccountTest {
     }
 
     @Test
-    void transferTest() throws IllegalAccessException {
+    void transferTest() throws IllegalAccessException, InsufficientFundsException {
+        transferWithEmail();
+        transferWithBankAccount();
+    }
+
+    @Test
+    void transferWithEmail() throws IllegalAccessException, InsufficientFundsException {
         BankAccount bankAccount = new BankAccount("a@c.com", 50);
         //throws for negative amount entered
         assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(".asdasd@edu", -0.01));
@@ -210,9 +220,9 @@ class BankAccountTest {
 
         //throws when the amount to be transferred is more than the account's remaining balance
         BankAccount bankAccount2 = new BankAccount("austin@ithaca.edu", 0);
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 0.01));
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 500000));
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 99999999));
+        assertThrows(InsufficientFundsException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 0.01));
+        assertThrows(InsufficientFundsException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 500000));
+        assertThrows(InsufficientFundsException.class, () -> bankAccount2.transfer("pchan@ithaca.edu", 9999999));
 
         //tests for successful transfers
         BankAccount bankAccount3 = new BankAccount("emily@ithaca.edu", 100000);
@@ -232,5 +242,34 @@ class BankAccountTest {
 
         bankAccount3.transfer("christina@ithaca.edu", 79999.89);
         assertEquals(0, bankAccount3.getBalance());
+    }
+
+    @Test
+    void transferWithBankAccount() throws IllegalAccessException, InsufficientFundsException {
+
+        BankAccount vattana = new BankAccount("pchan@ithaca.edu", 50000);
+        BankAccount doug = new BankAccount("dturnbull@ithaca.edu", 75000);
+
+        //successful transfer transaction test
+        assertEquals(50000, vattana.getBalance());
+        assertEquals(75000, doug.getBalance());
+
+        vattana.transfer(doug, 25000);
+
+        assertEquals(25000, vattana.getBalance());
+        assertEquals(100000, doug.getBalance());
+
+        //failing transfer transaction test
+        assertThrows(InsufficientFundsException.class,() -> doug.transfer(vattana, 100000.01));
+
+        //invalid amount test (negative)
+        assertThrows(IllegalArgumentException.class,() -> doug.transfer(vattana, -0.1));
+        assertThrows(IllegalArgumentException.class, () -> doug.transfer(vattana, -999999999));
+
+        //invalid amount test (decimal places)
+        assertThrows(IllegalArgumentException.class,() -> doug.transfer(vattana, 1.001));
+        assertThrows(IllegalArgumentException.class,() -> doug.transfer(vattana, 1.0001));
+        assertThrows(IllegalArgumentException.class,() -> doug.transfer(vattana, 1.00001));
+
     }
 }

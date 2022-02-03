@@ -9,7 +9,6 @@ public class BankAccount {
      * @throws IllegalArgumentException if email is invalid
      */
     public BankAccount(String email, double startingBalance){
-
         if (!isAmountValid(startingBalance)) {
             throw new IllegalArgumentException("The amount entered should be postive or have 2 decimal places or less.");
         }
@@ -91,9 +90,15 @@ public class BankAccount {
                 return false;  
             }
           
-            //check domain last portion
-            String domainLastPortion = domain.split("\\.")[1].toString();
+            
             String domainFirstPortion = domain.split("\\.")[0].toString();
+            String domainLastPortion = domain.split("\\.")[1].toString();
+            //check domain first portion
+            if (domainFirstPortion == "") {
+                return false;
+            }
+
+            //check domain last portion
             if (domainLastPortion.length() < 2){
                 return false;
             }
@@ -147,15 +152,7 @@ public class BankAccount {
             throw new IllegalArgumentException("The recipient's email you entered is invalid.");
         }
 
-        if (!isAmountValid(amount)) {
-            throw new IllegalArgumentException("The amount entered should be postive or have 2 decimal places or less.");
-        }
-
-        if (amount > balance) {
-            throw new InsufficientFundsException("The amount to be transferred is larger than your account's remaining balance.");
-        } else {
-            balance -= amount;
-        } 
+        withdraw(amount);
     }
 
     /***
