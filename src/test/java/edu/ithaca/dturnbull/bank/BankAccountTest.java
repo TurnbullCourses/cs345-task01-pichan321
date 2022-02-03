@@ -83,6 +83,8 @@ class BankAccountTest {
         assertFalse(BankAccount.isEmailValid("a@@ithaca.edu"));
         assertFalse(BankAccount.isEmailValid("abc@@xyz.com"));
         assertFalse(BankAccount.isEmailValid("a@b@c@@xy@z.com"));
+
+        //checking domain first portion
     }
 
     @Test

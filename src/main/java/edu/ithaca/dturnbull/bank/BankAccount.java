@@ -93,6 +93,7 @@ public class BankAccount {
           
             //check domain last portion
             String domainLastPortion = domain.split("\\.")[1].toString();
+            String domainFirstPortion = domain.split("\\.")[0].toString();
             if (domainLastPortion.length() < 2){
                 return false;
             }
@@ -136,10 +137,12 @@ public class BankAccount {
 
     /***
      * @param recipientEmail of the account you are transferring to
+     * @param amount of the money to be transferred
      * @throws IllegalArgumentException if either the email or amount entered is invalid
+     * @throws InsufficientFundsException if the amount entered is more than the account's remaining balance
      * @post the amount is deducted from your account and transferred to the account associated with the email entered
      */
-    public void transfer(String recipientEmail, double amount) throws IllegalAccessException {
+    public void transfer(String recipientEmail, double amount) throws IllegalAccessException, InsufficientFundsException {
         if (!isEmailValid(recipientEmail)) {
             throw new IllegalArgumentException("The recipient's email you entered is invalid.");
         }
@@ -149,9 +152,20 @@ public class BankAccount {
         }
 
         if (amount > balance) {
-            throw new IllegalArgumentException("The amount to be transferred is larger than your account's remaining balance.");
+            throw new InsufficientFundsException("The amount to be transferred is larger than your account's remaining balance.");
         } else {
             balance -= amount;
-        }
+        } 
+    }
+
+    /***
+     * @param recipientAccount you are transferring to
+     * @throws IllegalArgumentException if the amount to be transferred entered is invalid
+     * @throws InsufficientFundsException if the amount to be transferred is more than the account's remaining balance
+     * @post the amount is deducted from your account and transferred to the account associated with the email entered
+     */
+    public void transfer(BankAccount recipientAccount, double amount) throws IllegalAccessException, InsufficientFundsException {
+        withdraw(amount);
+        recipientAccount.deposit(amount);
     }
 }
